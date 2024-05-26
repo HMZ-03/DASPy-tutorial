@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basic Processing &mdash; DASPy-tutorial 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="可视化" href="Visualization.html" />
+    <link rel="prev" title="开始" href="Reading%20DAS%20Data.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DASPy-tutorial
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Reading%20DAS%20Data.html">开始</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Basic Processing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#preprocessing">Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filtering">Filtering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#frequency-attribute">Frequency Attribute</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Visualization.html">可视化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Channel%20Analysis.html">信道分析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Denoising.html">数据去噪</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Wavefield%20Decomposition.html">波场分解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Strain-velocity%20Conversion.html">应变-速度转换</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DASPy-tutorial</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Basic Processing</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Basic Processing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="basic-processing">
+<h1>Basic Processing<a class="headerlink" href="#basic-processing" title="Permalink to this heading"></a></h1>
+<p>DASPy integrates three modules: <a class="reference internal" href="#preprocessing"><span class="std std-ref">Preprocessing</span></a>, <a class="reference internal" href="#filtering"><span class="std std-ref">Filtering</span></a> and <a class="reference internal" href="#frequency-attribute"><span class="std std-ref">Frequency Attribute</span></a> to meet basic data processing needs.</p>
+<section id="preprocessing">
+<span id="id1"></span><h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this heading"></a></h2>
+<p>DASPy integrates a large number of commonly used DAS preprocessing tools, including <code class="docutils literal notranslate"><span class="pre">phase2strain</span></code> , <code class="docutils literal notranslate"><span class="pre">normalization</span></code> , <code class="docutils literal notranslate"><span class="pre">demeaning</span></code> , <code class="docutils literal notranslate"><span class="pre">detrending</span></code> , <code class="docutils literal notranslate"><span class="pre">stacking</span></code> , <code class="docutils literal notranslate"><span class="pre">cosine_taper</span></code> , <code class="docutils literal notranslate"><span class="pre">downsampling</span></code> , <code class="docutils literal notranslate"><span class="pre">trimming</span></code> , <code class="docutils literal notranslate"><span class="pre">padding</span></code> , <code class="docutils literal notranslate"><span class="pre">time_integration</span></code> and <code class="docutils literal notranslate"><span class="pre">time_differential</span></code> 。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">read</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span> <span class="o">=</span> <span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">detrending</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>When processing the data, the corresponding attributes will be automatically changed if necessary:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">data_type</span>
+<span class="go">&#39;strain rate&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">time_integration</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">data_type</span>
+<span class="go">&#39;strain&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="filtering">
+<span id="id2"></span><h2>Filtering<a class="headerlink" href="#filtering" title="Permalink to this heading"></a></h2>
+<p>DASPy contains commonly used filtering methods, including <code class="docutils literal notranslate"><span class="pre">bandpass</span></code> , <code class="docutils literal notranslate"><span class="pre">bandstop</span></code> , <code class="docutils literal notranslate"><span class="pre">lowpass</span></code> , <code class="docutils literal notranslate"><span class="pre">highpass</span></code> , <code class="docutils literal notranslate"><span class="pre">envelope</span></code> and <cite>lowpass_cheby_2`</cite> (mainly used for low-pass filtering before downsampling):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">bandpass</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="frequency-attribute">
+<span id="id3"></span><h2>Frequency Attribute<a class="headerlink" href="#frequency-attribute" title="Permalink to this heading"></a></h2>
+<p>The frequency domain attribute analysis supported by DASPy includes spectrum (x-t), spectrogram (f-t) and frequency-wavenumber spectrum (f-k), which are calculated using <code class="docutils literal notranslate"><span class="pre">spectrum</span></code>, <code class="docutils literal notranslate"><span class="pre">spectrogram</span></code> and <code class="docutils literal notranslate"><span class="pre">fk-transform</span></code> respectively. method calculation. <code class="docutils literal notranslate"><span class="pre">spectrogram</span></code> calculates the average spectrogram of all channels by default. You can use the <code class="docutils literal notranslate"><span class="pre">xmin</span></code> and <code class="docutils literal notranslate"><span class="pre">xmax</span></code> parameters to limit the starting and ending channels of the average spectrum:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">spec</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">spectrum</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Zxx</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">xmin</span><span class="o">=</span><span class="mi">2600</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mi">2620</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fk</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">fk_transform</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If you only need to plot these three frequency domain spectra without outputting the calculation results, you can directly use the <code class="docutils literal notranslate"><span class="pre">plot</span></code> method. For details, see <a class="reference internal" href="Visualization.html"><span class="doc">可视化</span></a> .</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Reading%20DAS%20Data.html" class="btn btn-neutral float-left" title="开始" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Visualization.html" class="btn btn-neutral float-right" title="可视化" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Minzhe Hu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

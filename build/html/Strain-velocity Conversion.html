@@ -107,7 +107,7 @@
 <section id="curvelet-transform-method">
 <span id="id2"></span><h2>Curvelet Transform Method<a class="headerlink" href="#curvelet-transform-method" title="Permalink to this heading"></a></h2>
 <p>The basis function of the curvelet transform appears as a wedge with a certain velocity range in the FK domain. The curvelet transform method multiplies each curvelet coefficient by the median velocity of its basis function to achieve strain-velocity conversion.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec_cv</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">fk_rescaling</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec_cv</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">curvelet_conversion</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>

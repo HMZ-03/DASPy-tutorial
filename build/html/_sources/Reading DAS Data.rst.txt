@@ -2,10 +2,24 @@ Reading DAS Data
 =============================================
 
 
-Reading
+Reading Data from Files
 ------------------------------
 
-The ``read function`` is used to read multiple types of DAS data files. It supports reading .h5, .tdms, .segy/.sgy files, and also supports reading instances of ``Section`` class saved as a .pkl file (see below).
+The ``read function`` is used to read multiple types of DAS data files. The supported data formats are shown in the following table:
+
++--------+------+-------+----------------------------------------------------------------------+
+| format | read | write | remark                                                               |
++========+======+=======+======================================================================+
+| HDF5   | √    | √     | Supports data from OptaSense, Silixa, Febus, and Smart Earth Sensing |
++--------+------+-------+----------------------------------------------------------------------+
+| TDMS   | √    | √     | Supports data from Silixa and the Institute of Semiconductors, CAS   |
++--------+------+-------+----------------------------------------------------------------------+
+| SEG-Y  | √    | √     | Supports data from OptaSens and Silixa                               |
++--------+------+-------+----------------------------------------------------------------------+
+| PICKLE | √    | √     | daspy.Section or numpy.ndarray class instances saved in binary       |
++--------+------+-------+----------------------------------------------------------------------+
+| NPY    | √    | √     | numpy.ndarray class instances saved in binary                        |
++--------+------+-------+----------------------------------------------------------------------+
 
 By default, the function will output a Section class instance containing data and metadata. You can set ``output_type='array'`` to output data in ``numpy.array`` format, in which case metadata will be output in ``dict`` format. Setting ``ch1`` or/and ``ch2`` limits the range of channels to read.
 
@@ -15,6 +29,14 @@ Read the example waveform as a ``Section`` instance (recommended) or ``numpy.arr
     >>> sec = read()
     >>> data, metadata = read(output_type='array', ch1=2700, ch2=2800) # set channel range
 
+Converting from Instances of Other Packages
+----------------------------------------------------------
+
+It's supported to streaming data from `DASCore <https://dascore.org/>`_ and `ObsPy <https://docs.obspy.org/>`_ to DASPy:
+
+    >>> from daspy import Section
+    >>> sec_dascore = Section.from_dascore_patch(patch) # convert dascore.core.patch.Patch instance to daspy.section instance
+    >>> sec_obspy = Section.from_obspy_stream(st) # convert obspy.core.stream.Stream instance to daspy.section instance
 
 Section
 ------------------------------

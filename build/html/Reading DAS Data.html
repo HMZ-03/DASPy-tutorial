@@ -47,17 +47,18 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Reading DAS Data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#reading">Reading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reading-data-from-files">Reading Data from Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#converting-from-instances-of-other-packages">Converting from Instances of Other Packages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#section">Section</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#dasdatetime">DASDateTime</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Basic%20Processing.html">Basic Processing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Visualization.html">可视化</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Channel%20Analysis.html">信道分析</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Denoising.html">数据去噪</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Wavefield%20Decomposition.html">波场分解</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Strain-velocity%20Conversion.html">应变-速度转换</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Channel%20Analysis.html">Channel Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Denoising.html">Denoising</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Wavefield%20Decomposition.html">Wavefield Decomposition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Strain-velocity%20Conversion.html">Strain-velocity Conversion</a></li>
 </ul>
 
         </div>
@@ -86,14 +87,59 @@
              
   <section id="reading-das-data">
 <h1>Reading DAS Data<a class="headerlink" href="#reading-das-data" title="Permalink to this heading"></a></h1>
-<section id="reading">
-<h2>Reading<a class="headerlink" href="#reading" title="Permalink to this heading"></a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">read</span> <span class="pre">function</span></code> is used to read multiple types of DAS data files. It supports reading .h5, .tdms, .segy/.sgy files, and also supports reading instances of <code class="docutils literal notranslate"><span class="pre">Section</span></code> class saved as a .pkl file (see below).</p>
+<section id="reading-data-from-files">
+<h2>Reading Data from Files<a class="headerlink" href="#reading-data-from-files" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">read</span> <span class="pre">function</span></code> is used to read multiple types of DAS data files. The supported data formats are shown in the following table:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>format</p></th>
+<th class="head"><p>read</p></th>
+<th class="head"><p>write</p></th>
+<th class="head"><p>remark</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>HDF5</p></td>
+<td><p>√</p></td>
+<td><p>√</p></td>
+<td><p>Supports data from OptaSense, Silixa, Febus, and Smart Earth Sensing</p></td>
+</tr>
+<tr class="row-odd"><td><p>TDMS</p></td>
+<td><p>√</p></td>
+<td><p>√</p></td>
+<td><p>Supports data from Silixa and the Institute of Semiconductors, CAS</p></td>
+</tr>
+<tr class="row-even"><td><p>SEG-Y</p></td>
+<td><p>√</p></td>
+<td><p>√</p></td>
+<td><p>Supports data from OptaSens and Silixa</p></td>
+</tr>
+<tr class="row-odd"><td><p>PICKLE</p></td>
+<td><p>√</p></td>
+<td><p>√</p></td>
+<td><p>daspy.Section or numpy.ndarray class instances saved in binary</p></td>
+</tr>
+<tr class="row-even"><td><p>NPY</p></td>
+<td><p>√</p></td>
+<td><p>√</p></td>
+<td><p>numpy.ndarray class instances saved in binary</p></td>
+</tr>
+</tbody>
+</table>
 <p>By default, the function will output a Section class instance containing data and metadata. You can set <code class="docutils literal notranslate"><span class="pre">output_type='array'</span></code> to output data in <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> format, in which case metadata will be output in <code class="docutils literal notranslate"><span class="pre">dict</span></code> format. Setting <code class="docutils literal notranslate"><span class="pre">ch1</span></code> or/and <code class="docutils literal notranslate"><span class="pre">ch2</span></code> limits the range of channels to read.</p>
 <p>Read the example waveform as a <code class="docutils literal notranslate"><span class="pre">Section</span></code> instance (recommended) or <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> and <code class="docutils literal notranslate"><span class="pre">dict</span></code>:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">read</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span> <span class="o">=</span> <span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">output_type</span><span class="o">=</span><span class="s1">&#39;array&#39;</span><span class="p">,</span> <span class="n">ch1</span><span class="o">=</span><span class="mi">2700</span><span class="p">,</span> <span class="n">ch2</span><span class="o">=</span><span class="mi">2800</span><span class="p">)</span> <span class="c1"># set channel range</span>
+</pre></div>
+</div>
+</section>
+<section id="converting-from-instances-of-other-packages">
+<h2>Converting from Instances of Other Packages<a class="headerlink" href="#converting-from-instances-of-other-packages" title="Permalink to this heading"></a></h2>
+<p>It’s supported to streaming data from <a class="reference external" href="https://dascore.org/">DASCore</a> and <a class="reference external" href="https://docs.obspy.org/">ObsPy</a> to DASPy:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">Section</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_dascore</span> <span class="o">=</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_dascore_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span> <span class="c1"># convert dascore.core.patch.Patch instance to daspy.section instance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_obspy</span> <span class="o">=</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_obspy_stream</span><span class="p">(</span><span class="n">st</span><span class="p">)</span> <span class="c1"># convert obspy.core.stream.Stream instance to daspy.section instance</span>
 </pre></div>
 </div>
 </section>

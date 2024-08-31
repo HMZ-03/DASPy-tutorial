@@ -30,7 +30,7 @@ Curvelet Transform Method
 
 The basis function of the curvelet transform appears as a wedge with a certain velocity range in the FK domain. The curvelet transform method multiplies each curvelet coefficient by the median velocity of its basis function to achieve strain-velocity conversion.
 
-    >>> sec_cv = sec.copy().fk_rescaling(fmax=(5, 6))
+    >>> sec_cv = sec.copy().curvelet_conversion()
 
 
 .. _Time-Domain Slowness Detection Method:

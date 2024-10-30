@@ -7,36 +7,72 @@ Reading Data from Files
 
 The ``read function`` is used to read multiple types of DAS data files. The supported data formats are shown in the following table:
 
-+--------+------+-------+----------------------------------------------------------------------+
-| format | read | write | remark                                                               |
-+========+======+=======+======================================================================+
-| HDF5   | √    | √     | Supports data from OptaSense, Silixa, Febus, and Smart Earth Sensing |
-+--------+------+-------+----------------------------------------------------------------------+
-| TDMS   | √    | √     | Supports data from Silixa and the Institute of Semiconductors, CAS   |
-+--------+------+-------+----------------------------------------------------------------------+
-| SEG-Y  | √    | √     | Supports data from OptaSens and Silixa                               |
-+--------+------+-------+----------------------------------------------------------------------+
-| PICKLE | √    | √     | daspy.Section or numpy.ndarray class instances saved in binary       |
-+--------+------+-------+----------------------------------------------------------------------+
-| NPY    | √    | √     | numpy.ndarray class instances saved in binary                        |
-+--------+------+-------+----------------------------------------------------------------------+
++--------+------+-------+-------------------------------------------------------------------+
+| format | read | write | source                                                            |
++========+======+=======+===================================================================+
+| HDF5   | √    | √     | OptaSense, Silixa, Febus, AP Sensing, ASN and Smart Earth Sensing |
++--------+------+-------+-------------------------------------------------------------------+
+| TDMS   | √    | √     | Silixa and the Institute of Semiconductors, CAS                   |
++--------+------+-------+-------------------------------------------------------------------+
+| SEG-Y  | √    | √     | OptaSens and Silixa                                               |
++--------+------+-------+-------------------------------------------------------------------+
+| PICKLE | √    | √     | daspy.Section or numpy.ndarray class instances saved in binary    |
++--------+------+-------+-------------------------------------------------------------------+
+| NPY    | √    | √     | numpy.ndarray class instances saved in binary                     |
++--------+------+-------+-------------------------------------------------------------------+
 
-By default, the function will output a Section class instance containing data and metadata. You can set ``output_type='array'`` to output data in ``numpy.array`` format, in which case metadata will be output in ``dict`` format. Setting ``ch1`` or/and ``ch2`` limits the range of channels to read.
-
-Read the example waveform as a ``Section`` instance (recommended) or ``numpy.array`` and ``dict``:
+By default, the function will output a ``Section`` class instance containing data and metadata:
 
     >>> from daspy import read
-    >>> sec = read()
+    >>> sec = read() # Read waveform example
+
+You can set ``output_type='array'`` to output data in ``numpy.array`` format, in which case metadata will be output in ``dict`` format. Setting ``ch1`` or/and ``ch2`` limits the range of channels to read.
+
     >>> data, metadata = read(output_type='array', ch1=2700, ch2=2800) # set channel range
+
+When only metadata is needed, you can set ``headonly=True`` to save reading time. In this case, the returned data will be an all-zero array of the same size as the original data.
+
+Customize a Read Function
+----------------------------------------------------------
+
+If DASPy does not support reading your data, you can create a custom read function. Although the function can complete the reading with only the parameter ``fname`` , we recommend that users allow the function to input parameters ``headonly``, ``ch1`` and ``ch2`` to ensure full compatibility:
+
+    >>> import h5py
+    >>> from daspy import DASDateTime
+    >>> 
+    >>> def read_new_h5(fname, headonly=False, **kwargs):
+    >>>     with h5py.File(fname, 'r') as h5_file:
+    >>>         start_channel = h5_file.attrs['channel_start']
+    >>>         end_channel = h5_file.attrs['channel_end']
+    >>>         ch1 = kwargs.pop('ch1', start_channel)
+    >>>         ch2 = kwargs.pop('ch2', end_channel)
+    >>>         if headonly:
+    >>>             data = np.zeros_like(h5_file['raw_data'])
+    >>>         else:
+    >>>             data = h5_file['raw_data'][ch1-start_channel:ch2-start_channel]
+    >>>         
+    >>>         metadata = {'dx': h5_file.attrs['channel spacing m'],
+    >>>                     'fs': h5_file.attrs['sampling rate Hz'],
+    >>>                     'gauge_length': h5_file.attrs['GL m'],
+    >>>                     'start_channel': start_channel,
+    >>>                     'start_time': DASDateTime.strptime(h5_file.attrs['starttime'], '%Y-%m-%dT%H:%M:%S.%f'),
+    >>>                     'scale': h5_file.attrs['scale factor to strain']}
+    >>>         return data, metadata
+
+The required keywords in ``metadata`` are ``dx`` and ``fs`` (which can be temporarily set to ``None`` if they are not included in the file metadata), and the remaining parameters can be read on demand. This read function can then be input as the ``ftype`` parameter to the ``read`` function or used to construct a ``Collection`` class (See :doc:`Handling Continuous Data` for details).
+
+    >>> sec = read(fname, ftype=read_new_h5, headonly=True)
+    >>> coll = Collection('../data/*.h5', ftype=read_new_h5)
 
 Converting from Instances of Other Packages
 ----------------------------------------------------------
 
-It's supported to streaming data from `DASCore <https://dascore.org/>`_ and `ObsPy <https://docs.obspy.org/>`_ to DASPy:
+It's supported to streaming data from `ObsPy <https://docs.obspy.org/>`_ , `DASCore <https://dascore.org/>`_ and `lightguide <https://github.com/pyrocko/lightguide>`_ to DASPy:
 
     >>> from daspy import Section
-    >>> sec_dascore = Section.from_dascore_patch(patch) # convert dascore.core.patch.Patch instance to daspy.section instance
     >>> sec_obspy = Section.from_obspy_stream(st) # convert obspy.core.stream.Stream instance to daspy.section instance
+    >>> sec_dascore = Section.from_dascore_patch(patch) # convert dascore.core.patch.Patch instance to daspy.section instance
+    >>> sec_lightguide = Section.from_lightguide_blast(blast) # convert lightguide.blast.Blast instance to daspy.section instance
 
 Section
 ------------------------------
@@ -78,6 +114,14 @@ DASPy has built-in local time zone ``local_tz`` and utc time zone ``utc`` for sp
     DASDateTime(2021, 3, 18, 17, 52, 23, tzinfo=datetime.timezone.utc)
 
 Use ``datetime.timezone(datetime.timedelta(hours=h))`` to create other time zones if needed.
+
+You may use the ``local``, ``utc``, and ``remove_tz`` methods to convert or remove timezone information:
+
+    >>> time = DASDateTime.strptime('2021-03-19T1:52:23Z', '%Y-%m-%dT%H:%M:%S%z')
+    >>> time.local()
+    DASDateTime(2021, 3, 19, 9, 52, 23, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800)))
+    >>> time.remove_tz()
+    DASDateTime(2021, 3, 19, 1, 52, 23)
 
 In addition to the addition and subtraction operations between ``datetime.datetime`` and ``datetime.timedelta`` supported by the parent class itself, ``DASDateTime`` also supports input numbers and iterable objects ``Iterable`` to calculate additions and subtraction. All time differences are expressed in seconds (s), and problems with unspecified time zones are automatically handled:
 

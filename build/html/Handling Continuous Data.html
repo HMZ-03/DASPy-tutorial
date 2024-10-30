@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Processing continuous data &mdash; DASPy-tutorial 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Basic Processing" href="Basic%20Processing.html" />
+    <link rel="prev" title="Reading DAS Data" href="Reading%20DAS%20Data.html" />
+    <link href="_static/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DASPy-tutorial
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Reading%20DAS%20Data.html">Reading DAS Data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Processing continuous data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#collection">Collection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-selection">Data Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#continuous-data-processing">Continuous Data Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Basic%20Processing.html">Basic Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Channel%20Analysis.html">Channel Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Denoising.html">Denoising</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Wavefield%20Decomposition.html">Wavefield Decomposition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Strain-velocity%20Conversion.html">Strain-velocity Conversion</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DASPy-tutorial</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Processing continuous data</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Handling Continuous Data.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="processing-continuous-data">
+<h1>Processing continuous data<a class="headerlink" href="#processing-continuous-data" title="Permalink to this heading"></a></h1>
+<p>When processing continuous-time signals such as various types of filtering, downsampling, cosine taper, time differentiation or integration, processing each single file and then splicing then will cause data discontinuity. Using the <code class="docutils literal notranslate"><span class="pre">collection</span></code> class to process continuous data can solve the continuity problem of these operations.</p>
+<section id="collection">
+<h2>Collection<a class="headerlink" href="#collection" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Collection</span></code> class is used to store continuous data belonging to the same acquisition. It saves the list of continuous data file paths <code class="docutils literal notranslate"><span class="pre">flist</span></code> and the start time of each file <code class="docutils literal notranslate"><span class="pre">ftime</span></code>, as well as the metadata information of the acquisition, including the number of channels <code class="docutils literal notranslate"><span class="pre">nch</span></code>, the track spacing <code class="docutils literal notranslate"><span class="pre">dx</span></code>, the gauge length <code class="docutils literal notranslate"><span class="pre">gauge_length</span></code>, the sampling rate <code class="docutils literal notranslate"><span class="pre">fs</span></code>, the number of sampling points of a single file <code class="docutils literal notranslate"><span class="pre">nt</span></code> and the duration of a single file <code class="docutils literal notranslate"><span class="pre">flength</span></code>. When initializing a class instance, by default, the metadata of the second data file is read to obtain all metadata information, and the start time of each file <code class="docutils literal notranslate"><span class="pre">ftime</span></code> is automatically calculated based on the start time <code class="docutils literal notranslate"><span class="pre">start_time</span></code> of the second data:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">Collection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s1">&#39;data/*.h5&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span>
+<span class="go">       flist: 2608 files</span>
+<span class="go">              [data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312132304.h5,</span>
+<span class="go">               data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312132305.h5,</span>
+<span class="go">               ...,</span>
+<span class="go">               data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312151831.h5]</span>
+<span class="go">       ftime: 2023-12-13 23:04:00.558582+00:00 to 2023-12-15 18:32:00.558582+00:00</span>
+<span class="go">     flength: 60.0</span>
+<span class="go">         nch: 1956</span>
+<span class="go">          nt: 12000</span>
+<span class="go">          dx: 1.022494912147522</span>
+<span class="go">          fs: 200.0</span>
+<span class="go">gauge_length: 4.0</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">meta_from_file='all'</span></code> to read metadata for each file. DASPy will check if all metadata are consistent, data is continuous, and save and calculate required properties. Metadata of various types can also be specified directly. This method is very time-consuming for large amounts of continuous data.</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">timeinfo_format</span></code> to get the start time from the file name, check for continuity and calculate <code class="docutils literal notranslate"><span class="pre">flength</span></code>. <code class="docutils literal notranslate"><span class="pre">timeinfo_format='DAS_%Y-%m-%dT%H:%M:%S%z.h5'</span></code> indicates the time corresponding to the file name, <code class="docutils literal notranslate"><span class="pre">timeinfo_format=(slice(33:45),</span> <span class="pre">'%Y%m%d%H%M%S')</span></code> indicates the time corresponding to the slice of the file name.</p></li>
+</ul>
+</section>
+<section id="data-selection">
+<h2>Data Selection<a class="headerlink" href="#data-selection" title="Permalink to this heading"></a></h2>
+<p>Select data for a certain time period from the <code class="docutils literal notranslate"><span class="pre">Collection</span></code> class:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">DASDateTime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">stime</span> <span class="o">=</span> <span class="n">DASDateTime</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span> <span class="n">etime</span><span class="o">=</span><span class="n">DASDateTime</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+<span class="go">       flist: 61 files</span>
+<span class="go">              [data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312141159.h5,</span>
+<span class="go">               data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312141200.h5,</span>
+<span class="go">               ...,</span>
+<span class="go">               data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312141259.h5]</span>
+<span class="go">       ftime: 2023-12-13 23:04:00.558582+00:00 to 2023-12-15 18:32:00.558582+00:00</span>
+<span class="go">     flength: 60.0</span>
+<span class="go">         nch: 1956</span>
+<span class="go">          nt: 12000</span>
+<span class="go">          dx: 1.022494912147522</span>
+<span class="go">          fs: 200.0</span>
+<span class="go">gauge_length: 4.0</span>
+</pre></div>
+</div>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">readsec=True</span></code> will directly read the data of the required period as an instance of the <code class="docutils literal notranslate"><span class="pre">Section</span></code> class and return it.</p>
+</section>
+<section id="continuous-data-processing">
+<h2>Continuous Data Processing<a class="headerlink" href="#continuous-data-processing" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Collection.process</span></code> method can read all files in turn as <code class="docutils literal notranslate"><span class="pre">Section</span></code> class instances, perform a series of required processing, add a suffix and save to the target directory. This method will solve data discontinuity by caching filter states and other methods. An example of low-pass filtering all data and downsampling by 5 times in both time and space domains, and then integrating:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">operations</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;downsampling&#39;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">tint</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">xint</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">lowpass_filter</span><span class="o">=</span><span class="kc">True</span><span class="p">)],</span>
+<span class="go">                  [&#39;time_integration&#39;, dict()]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">operations</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="s1">&#39;../processed&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;_pro&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Reading%20DAS%20Data.html" class="btn btn-neutral float-left" title="Reading DAS Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Basic%20Processing.html" class="btn btn-neutral float-right" title="Basic Processing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Minzhe Hu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

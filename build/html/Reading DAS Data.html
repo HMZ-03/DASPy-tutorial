@@ -21,8 +21,10 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Basic Processing" href="Basic%20Processing.html" />
-    <link rel="prev" title="Installation" href="Installation.html" /> 
+    <link rel="next" title="Processing continuous data" href="Handling%20Continuous%20Data.html" />
+    <link rel="prev" title="Installation" href="Installation.html" />
+    <link href="_static/style.css" rel="stylesheet" type="text/css">
+
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,11 +50,13 @@
 <li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Reading DAS Data</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#reading-data-from-files">Reading Data from Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customize-a-read-function">Customize a Read Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#converting-from-instances-of-other-packages">Converting from Instances of Other Packages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#section">Section</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#dasdatetime">DASDateTime</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="Handling%20Continuous%20Data.html">Processing continuous data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Basic%20Processing.html">Basic Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Visualization.html">Visualization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Channel%20Analysis.html">Channel Analysis</a></li>
@@ -95,24 +99,24 @@
 <tr class="row-odd"><th class="head"><p>format</p></th>
 <th class="head"><p>read</p></th>
 <th class="head"><p>write</p></th>
-<th class="head"><p>remark</p></th>
+<th class="head"><p>source</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>HDF5</p></td>
 <td><p>√</p></td>
 <td><p>√</p></td>
-<td><p>Supports data from OptaSense, Silixa, Febus, and Smart Earth Sensing</p></td>
+<td><p>OptaSense, Silixa, Febus, AP Sensing, ASN and Smart Earth Sensing</p></td>
 </tr>
 <tr class="row-odd"><td><p>TDMS</p></td>
 <td><p>√</p></td>
 <td><p>√</p></td>
-<td><p>Supports data from Silixa and the Institute of Semiconductors, CAS</p></td>
+<td><p>Silixa and the Institute of Semiconductors, CAS</p></td>
 </tr>
 <tr class="row-even"><td><p>SEG-Y</p></td>
 <td><p>√</p></td>
 <td><p>√</p></td>
-<td><p>Supports data from OptaSens and Silixa</p></td>
+<td><p>OptaSens and Silixa</p></td>
 </tr>
 <tr class="row-odd"><td><p>PICKLE</p></td>
 <td><p>√</p></td>
@@ -126,20 +130,56 @@
 </tr>
 </tbody>
 </table>
-<p>By default, the function will output a Section class instance containing data and metadata. You can set <code class="docutils literal notranslate"><span class="pre">output_type='array'</span></code> to output data in <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> format, in which case metadata will be output in <code class="docutils literal notranslate"><span class="pre">dict</span></code> format. Setting <code class="docutils literal notranslate"><span class="pre">ch1</span></code> or/and <code class="docutils literal notranslate"><span class="pre">ch2</span></code> limits the range of channels to read.</p>
-<p>Read the example waveform as a <code class="docutils literal notranslate"><span class="pre">Section</span></code> instance (recommended) or <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> and <code class="docutils literal notranslate"><span class="pre">dict</span></code>:</p>
+<p>By default, the function will output a <code class="docutils literal notranslate"><span class="pre">Section</span></code> class instance containing data and metadata:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">read</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span> <span class="o">=</span> <span class="n">read</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">output_type</span><span class="o">=</span><span class="s1">&#39;array&#39;</span><span class="p">,</span> <span class="n">ch1</span><span class="o">=</span><span class="mi">2700</span><span class="p">,</span> <span class="n">ch2</span><span class="o">=</span><span class="mi">2800</span><span class="p">)</span> <span class="c1"># set channel range</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span> <span class="o">=</span> <span class="n">read</span><span class="p">()</span> <span class="c1"># Read waveform example</span>
+</pre></div>
+</div>
+<p>You can set <code class="docutils literal notranslate"><span class="pre">output_type='array'</span></code> to output data in <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> format, in which case metadata will be output in <code class="docutils literal notranslate"><span class="pre">dict</span></code> format. Setting <code class="docutils literal notranslate"><span class="pre">ch1</span></code> or/and <code class="docutils literal notranslate"><span class="pre">ch2</span></code> limits the range of channels to read.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">output_type</span><span class="o">=</span><span class="s1">&#39;array&#39;</span><span class="p">,</span> <span class="n">ch1</span><span class="o">=</span><span class="mi">2700</span><span class="p">,</span> <span class="n">ch2</span><span class="o">=</span><span class="mi">2800</span><span class="p">)</span> <span class="c1"># set channel range</span>
+</pre></div>
+</div>
+<p>When only metadata is needed, you can set <code class="docutils literal notranslate"><span class="pre">headonly=True</span></code> to save reading time. In this case, the returned data will be an all-zero array of the same size as the original data.</p>
+</section>
+<section id="customize-a-read-function">
+<h2>Customize a Read Function<a class="headerlink" href="#customize-a-read-function" title="Permalink to this heading"></a></h2>
+<p>If DASPy does not support reading your data, you can create a custom read function. Although the function can complete the reading with only the parameter <code class="docutils literal notranslate"><span class="pre">fname</span></code> , we recommend that users allow the function to input parameters <code class="docutils literal notranslate"><span class="pre">headonly</span></code>, <code class="docutils literal notranslate"><span class="pre">ch1</span></code> and <code class="docutils literal notranslate"><span class="pre">ch2</span></code> to ensure full compatibility:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">h5py</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">DASDateTime</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">read_new_h5</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">headonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">h5_file</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">start_channel</span> <span class="o">=</span> <span class="n">h5_file</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;channel_start&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">end_channel</span> <span class="o">=</span> <span class="n">h5_file</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;channel_end&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">ch1</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ch1&#39;</span><span class="p">,</span> <span class="n">start_channel</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">ch2</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ch2&#39;</span><span class="p">,</span> <span class="n">end_channel</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="k">if</span> <span class="n">headonly</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">h5_file</span><span class="p">[</span><span class="s1">&#39;raw_data&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="k">else</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="n">data</span> <span class="o">=</span> <span class="n">h5_file</span><span class="p">[</span><span class="s1">&#39;raw_data&#39;</span><span class="p">][</span><span class="n">ch1</span><span class="o">-</span><span class="n">start_channel</span><span class="p">:</span><span class="n">ch2</span><span class="o">-</span><span class="n">start_channel</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;dx&#39;</span><span class="p">:</span> <span class="n">h5_file</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;channel spacing m&#39;</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="s1">&#39;fs&#39;</span><span class="p">:</span> <span class="n">h5_file</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;sampling rate Hz&#39;</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="s1">&#39;gauge_length&#39;</span><span class="p">:</span> <span class="n">h5_file</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;GL m&#39;</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="s1">&#39;start_channel&#39;</span><span class="p">:</span> <span class="n">start_channel</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="s1">&#39;start_time&#39;</span><span class="p">:</span> <span class="n">DASDateTime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">h5_file</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;starttime&#39;</span><span class="p">],</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S.</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="s1">&#39;scale&#39;</span><span class="p">:</span> <span class="n">h5_file</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;scale factor to strain&#39;</span><span class="p">]}</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">metadata</span>
+</pre></div>
+</div>
+<p>The required keywords in <code class="docutils literal notranslate"><span class="pre">metadata</span></code> are <code class="docutils literal notranslate"><span class="pre">dx</span></code> and <code class="docutils literal notranslate"><span class="pre">fs</span></code> (which can be temporarily set to <code class="docutils literal notranslate"><span class="pre">None</span></code> if they are not included in the file metadata), and the remaining parameters can be read on demand. This read function can then be input as the <code class="docutils literal notranslate"><span class="pre">ftype</span></code> parameter to the <code class="docutils literal notranslate"><span class="pre">read</span></code> function or used to construct a <code class="docutils literal notranslate"><span class="pre">Collection</span></code> class (See <a class="reference internal" href="Handling%20Continuous%20Data.html"><span class="doc">Processing continuous data</span></a> for details).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="n">read_new_h5</span><span class="p">,</span> <span class="n">headonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s1">&#39;../data/*.h5&#39;</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="n">read_new_h5</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="converting-from-instances-of-other-packages">
 <h2>Converting from Instances of Other Packages<a class="headerlink" href="#converting-from-instances-of-other-packages" title="Permalink to this heading"></a></h2>
-<p>It’s supported to streaming data from <a class="reference external" href="https://dascore.org/">DASCore</a> and <a class="reference external" href="https://docs.obspy.org/">ObsPy</a> to DASPy:</p>
+<p>It’s supported to streaming data from <a class="reference external" href="https://docs.obspy.org/">ObsPy</a> , <a class="reference external" href="https://dascore.org/">DASCore</a> and <a class="reference external" href="https://github.com/pyrocko/lightguide">lightguide</a> to DASPy:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">Section</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_dascore</span> <span class="o">=</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_dascore_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span> <span class="c1"># convert dascore.core.patch.Patch instance to daspy.section instance</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sec_obspy</span> <span class="o">=</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_obspy_stream</span><span class="p">(</span><span class="n">st</span><span class="p">)</span> <span class="c1"># convert obspy.core.stream.Stream instance to daspy.section instance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_dascore</span> <span class="o">=</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_dascore_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span> <span class="c1"># convert dascore.core.patch.Patch instance to daspy.section instance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_lightguide</span> <span class="o">=</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_lightguide_blast</span><span class="p">(</span><span class="n">blast</span><span class="p">)</span> <span class="c1"># convert lightguide.blast.Blast instance to daspy.section instance</span>
 </pre></div>
 </div>
 </section>
@@ -177,6 +217,14 @@
 </pre></div>
 </div>
 <p>Use <code class="docutils literal notranslate"><span class="pre">datetime.timezone(datetime.timedelta(hours=h))</span></code> to create other time zones if needed.</p>
+<p>You may use the <code class="docutils literal notranslate"><span class="pre">local</span></code>, <code class="docutils literal notranslate"><span class="pre">utc</span></code>, and <code class="docutils literal notranslate"><span class="pre">remove_tz</span></code> methods to convert or remove timezone information:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">time</span> <span class="o">=</span> <span class="n">DASDateTime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s1">&#39;2021-03-19T1:52:23Z&#39;</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S%z&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>
+<span class="go">DASDateTime(2021, 3, 19, 9, 52, 23, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time</span><span class="o">.</span><span class="n">remove_tz</span><span class="p">()</span>
+<span class="go">DASDateTime(2021, 3, 19, 1, 52, 23)</span>
+</pre></div>
+</div>
 <p>In addition to the addition and subtraction operations between <code class="docutils literal notranslate"><span class="pre">datetime.datetime</span></code> and <code class="docutils literal notranslate"><span class="pre">datetime.timedelta</span></code> supported by the parent class itself, <code class="docutils literal notranslate"><span class="pre">DASDateTime</span></code> also supports input numbers and iterable objects <code class="docutils literal notranslate"><span class="pre">Iterable</span></code> to calculate additions and subtraction. All time differences are expressed in seconds (s), and problems with unspecified time zones are automatically handled:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DASDateTime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">100</span>
 <span class="go">DASDateTime(2021, 3, 24, 14, 29, 40)</span>
@@ -201,7 +249,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="Installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Basic%20Processing.html" class="btn btn-neutral float-right" title="Basic Processing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Handling%20Continuous%20Data.html" class="btn btn-neutral float-right" title="Processing continuous data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

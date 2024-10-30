@@ -24,6 +24,7 @@ Contents
    
    Installation
    Reading DAS Data
+   Handling Continuous Data
    Basic Processing
    Visualization
    Channel Analysis

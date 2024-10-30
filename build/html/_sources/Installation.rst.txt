@@ -10,6 +10,12 @@ Install via Pip (recommanded)
 
     pip install git+https://github.com/HMZ-03/DASPy.git
 
+If you installed DASPy this way, you can upgrade DASPy with the following command:
+
+::
+
+    pip install --upgrade git+https://github.com/HMZ-03/DASPy.git
+
 
 Install via Conda
 --------------------

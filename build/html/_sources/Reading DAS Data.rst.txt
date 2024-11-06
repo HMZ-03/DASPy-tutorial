@@ -46,15 +46,16 @@ If DASPy does not support reading your data, you can create a custom read functi
     >>>         end_channel = h5_file.attrs['channel_end']
     >>>         ch1 = kwargs.pop('ch1', start_channel)
     >>>         ch2 = kwargs.pop('ch2', end_channel)
+    >>>         dch = kwargs.pop('dch', 1)
     >>>         if headonly:
     >>>             data = np.zeros_like(h5_file['raw_data'])
     >>>         else:
-    >>>             data = h5_file['raw_data'][ch1-start_channel:ch2-start_channel]
-    >>>         
-    >>>         metadata = {'dx': h5_file.attrs['channel spacing m'],
-    >>>                     'fs': h5_file.attrs['sampling rate Hz'],
+    >>>             data = h5_file['raw_data'][ch1-start_channel:ch2-start_channel:dch]
+    >>>         dx = h5_file.attrs['channel spacing m']
+    >>>         metadata = {'dx': dx, 'fs': h5_file.attrs['sampling rate Hz'],
     >>>                     'gauge_length': h5_file.attrs['GL m'],
-    >>>                     'start_channel': start_channel,
+    >>>                     'start_channel': start_channel + ch1,
+    >>>                     'start_distance': (start_channel + ch1) * dx,
     >>>                     'start_time': DASDateTime.strptime(h5_file.attrs['starttime'], '%Y-%m-%dT%H:%M:%S.%f'),
     >>>                     'scale': h5_file.attrs['scale factor to strain']}
     >>>         return data, metadata

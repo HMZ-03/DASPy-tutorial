@@ -58,7 +58,7 @@ If DASPy does not support reading your data, you can create a custom read functi
     >>>                     'start_distance': (start_channel + ch1) * dx,
     >>>                     'start_time': DASDateTime.strptime(h5_file.attrs['starttime'], '%Y-%m-%dT%H:%M:%S.%f'),
     >>>                     'scale': h5_file.attrs['scale factor to strain']}
-    >>>         return data, metadata
+    >>>     return data, metadata
 
 The required keywords in ``metadata`` are ``dx`` and ``fs`` (which can be temporarily set to ``None`` if they are not included in the file metadata), and the remaining parameters can be read on demand. This read function can then be input as the ``ftype`` parameter to the ``read`` function or used to construct a ``Collection`` class (See :doc:`Handling Continuous Data` for details).
 

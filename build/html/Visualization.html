@@ -98,6 +98,10 @@
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/waveform.png"><img alt="_images/waveform.png" src="_images/waveform.png" style="width: 600px;" /></a>
+<p>Adding <code class="docutils literal notranslate"><span class="pre">savefig</span></code> to save figure as specified filename, and <code class="docutils literal notranslate"><span class="pre">dpi</span></code> to set the resolution of the figure in dots-per-inch:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">savefig</span><span class="o">=</span><span class="s1">&#39;waveform.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>When drawing frequency domain graphs, you can set the <code class="docutils literal notranslate"><span class="pre">kwargs_pro</span></code> parameter to specify how the spectrum is plotted:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="s1">&#39;fk&#39;</span><span class="p">,</span> <span class="n">kwargs_pro</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">taper</span><span class="o">=</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">),</span> <span class="n">nfft</span><span class="o">=</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">8192</span><span class="p">)))</span> <span class="c1"># set the coefficient of 2D cosine taper to (0.02,0.05), output points of 2DFFT to (1024, 8192)</span>
 </pre></div>

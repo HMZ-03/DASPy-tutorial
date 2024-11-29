@@ -16,6 +16,10 @@ Plot and show image：
 .. image:: ../media/waveform.png
     :width: 600
 
+Adding ``savefig`` to save figure as specified filename, and ``dpi`` to set the resolution of the figure in dots-per-inch:
+
+    >>> sec.plot(savefig='waveform.png', dpi=400)
+
 When drawing frequency domain graphs, you can set the ``kwargs_pro`` parameter to specify how the spectrum is plotted:
 
     >>> sec.plot(obj='fk', kwargs_pro=dict(taper=(0.02, 0.05), nfft=(1024, 8192))) # set the coefficient of 2D cosine taper to (0.02,0.05), output points of 2DFFT to (1024, 8192)

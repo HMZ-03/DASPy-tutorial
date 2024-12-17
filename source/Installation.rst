@@ -3,15 +3,20 @@ Installation
 
 DASPy can be installed through common methods such as Pip and Conda.
 
-Install via Pip (recommanded)
+Install via Pip
 ----------------------------------------
 
+Install from PyPI:
+::
+
+    pip install daspy-toolbox
+
+Install the latest version from GitHub:
 ::
 
     pip install git+https://github.com/HMZ-03/DASPy.git
 
 If you installed DASPy this way, you can upgrade DASPy with the following command:
-
 ::
 
     pip install --upgrade git+https://github.com/HMZ-03/DASPy.git
@@ -22,13 +27,12 @@ Install via Conda
 
 ::
 
-    conda install -c hmz-03 daspy
+    conda install daspy-toolbox
 
-If an error is reported, please try:
-
+or
 ::
 
-    conda update -n base -c conda-forge conda
+    conda install conda-forge::daspy-toolbox
 
 
 Manual Installation

@@ -1,0 +1,39 @@
+\selectlanguage *{english}
+\contentsline {chapter}{\numberline {1}Contents}{3}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Installation}{3}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Install via Pip}{3}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}Install via Conda}{3}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}Manual Installation}{3}{subsection.1.1.3}%
+\contentsline {section}{\numberline {1.2}Reading DAS Data}{4}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Reading Data from Files}{4}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Customize a Read Function}{4}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}Converting from Instances of Other Packages}{5}{subsection.1.2.3}%
+\contentsline {subsection}{\numberline {1.2.4}Section}{5}{subsection.1.2.4}%
+\contentsline {subsection}{\numberline {1.2.5}DASDateTime}{6}{subsection.1.2.5}%
+\contentsline {section}{\numberline {1.3}Processing continuous data}{7}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Collection}{7}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Data Selection}{7}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.3.3}Continuous Data Processing}{8}{subsection.1.3.3}%
+\contentsline {section}{\numberline {1.4}Basic Processing}{8}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}Preprocessing}{8}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {1.4.2}Filtering}{9}{subsection.1.4.2}%
+\contentsline {subsection}{\numberline {1.4.3}Frequency Attribute}{9}{subsection.1.4.3}%
+\contentsline {section}{\numberline {1.5}Visualization}{9}{section.1.5}%
+\contentsline {subsection}{\numberline {1.5.1}Call Class Method}{9}{subsection.1.5.1}%
+\contentsline {subsection}{\numberline {1.5.2}Call the function}{12}{subsection.1.5.2}%
+\contentsline {section}{\numberline {1.6}Channel Analysis}{13}{section.1.6}%
+\contentsline {subsection}{\numberline {1.6.1}Location Interpolation}{13}{subsection.1.6.1}%
+\contentsline {subsection}{\numberline {1.6.2}Turning Point Detection}{15}{subsection.1.6.2}%
+\contentsline {subsection}{\numberline {1.6.3}Channel Quality Checking}{16}{subsection.1.6.3}%
+\contentsline {section}{\numberline {1.7}Denoising}{17}{section.1.7}%
+\contentsline {subsection}{\numberline {1.7.1}Spike Removal}{17}{subsection.1.7.1}%
+\contentsline {subsection}{\numberline {1.7.2}Common Mode Noise Removal}{19}{subsection.1.7.2}%
+\contentsline {subsection}{\numberline {1.7.3}Stochastic Noise Removal}{21}{subsection.1.7.3}%
+\contentsline {section}{\numberline {1.8}Wavefield Decomposition}{23}{section.1.8}%
+\contentsline {subsection}{\numberline {1.8.1}FK Filtering}{24}{subsection.1.8.1}%
+\contentsline {subsection}{\numberline {1.8.2}Curvelet Windowing Technology}{25}{subsection.1.8.2}%
+\contentsline {section}{\numberline {1.9}Strain\sphinxhyphen {}velocity Conversion}{26}{section.1.9}%
+\contentsline {subsection}{\numberline {1.9.1}FK Rescaling Method}{27}{subsection.1.9.1}%
+\contentsline {subsection}{\numberline {1.9.2}Curvelet Transform Method}{27}{subsection.1.9.2}%
+\contentsline {subsection}{\numberline {1.9.3}Time\sphinxhyphen {}Domain Slowness Detection Method}{27}{subsection.1.9.3}%
+\contentsline {subsection}{\numberline {1.9.4}Comparison of Three Methods}{27}{subsection.1.9.4}%
